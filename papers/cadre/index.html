@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Separating crop TFP from livestock TFP when inputs are shared | Tebila Nakelse</title>
+<meta name="description" content="Preliminary working draft. A protocol (CADRE) for crop and livestock total factor productivity series that add up to aggregate agricultural TFP, with identification bounds and simulation evidence.">
+<meta name="author" content="Tebila Nakelse">
+<link rel="canonical" href="https://tnakelsev.github.io/papers/cadre/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14201b; --ink-soft:#44524c; --paper:#f7f4ec; --card:#ffffff;
+  --green:#0f3d2e; --green-2:#1d5a45; --ochre:#c8862a; --line:#d9d3c3;
+  --serif:"Fraunces",Georgia,serif; --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--green-2);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--ochre)}
+.wrap{max-width:780px;margin:0 auto;padding:0 24px}
+header{padding:22px 0;border-bottom:1px solid var(--line)}
+header a{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--green);text-decoration:none}
+header a span{color:var(--ochre)}
+main{padding:56px 0 72px}
+h1,h2{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5vw,42px)}
+h2{font-size:24px;margin-top:44px}
+.kicker{font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre);margin:0 0 14px}
+.sub{font-size:19px;color:var(--ink-soft);margin:14px 0 0}
+.status{margin:28px 0 0;padding:16px 20px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ochre);font-size:15.5px}
+.btn{display:inline-block;margin-top:28px;padding:13px 22px;background:var(--green);color:#fff;text-decoration:none;font-weight:600;border-radius:4px}
+.btn:hover{background:var(--green-2);color:#fff}
+ul{padding-left:20px}
+li{margin:8px 0}
+figure{margin:28px 0 0}
+figure img{width:100%;height:auto;border:1px solid var(--line);background:#fcfcfb}
+figcaption{font-size:14px;color:var(--ink-soft);margin-top:8px}
+code{font-size:.9em;background:var(--card);border:1px solid var(--line);padding:1px 5px;border-radius:3px}
+footer{border-top:1px solid var(--line);padding:24px 0;font-size:14px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="/">Tebila Nakelse<span>.</span></a></div></header>
+<main><div class="wrap">
+  <p class="kicker">Working draft</p>
+  <h1>Separating crop TFP from livestock TFP when inputs are shared</h1>
+  <p class="sub">The CADRE protocol: Constrained Allocation and Domar Reconciliation</p>
+  <p class="status"><strong>Preliminary working draft, 23 November 2026.</strong> Simulation evidence only; the method has not yet been applied to survey data. Comments are welcome. Tebila Nakelse, with Claude (Anthropic) as research assistant. The views expressed are the author's own and do not represent those of any current or former employer.</p>
+  <a class="btn" href="nakelse-2026-crop-livestock-tfp-cadre.pdf">Read the paper (PDF, 13 pages)</a>
+
+  <h2>Summary</h2>
+  <p>Agricultural total factor productivity (TFP) is published for agriculture as a whole, almost never for crops and livestock separately. Farms do not report how much of their labour, machinery or capital went to the fields and how much to the animals, and on mixed farms the two activities feed each other through residues, manure and draught power.</p>
+  <p>The note proposes a protocol that produces crop and livestock TFP series with three properties.</p>
+  <ul>
+    <li><strong>They add up.</strong> The two sector series reproduce the published aggregate through Domar weights, so existing aggregate series stay untouched.</li>
+    <li><strong>They do not claim more than the data support.</strong> Before any assumption, the protocol reports the full range of sector TFP growth that the data allow. That range is a line segment: once the aggregate is known, crop and livestock TFP can only move against each other along one line.</li>
+    <li><strong>The point estimate rests on three independent sources.</strong> Physical requirements, the behaviour of specialised farms, and a measured allocation on a small validation subsample. Their agreement can be tested.</li>
+  </ul>
+  <p>In a simulated farm economy where the truth is known, the protocol recovers sector TFP growth with an error of about 0.03 percentage point a year, against 0.07 for the usual revenue-share split. Without any allocation assumption the same data allow crop TFP growth anywhere between −8.6% and +11.4% a year, and the note says so.</p>
+  <figure>
+    <img src="F1_cadre_simulation.png" alt="Left: error of four allocation methods against the true allocation, CADRE lowest. Right: all admissible pairs of crop and livestock TFP growth lie on one line.">
+    <figcaption>Left: error of each method over 200 simulated economies. Right: in one economy, every admissible pair of sector TFP growth rates lies on the Domar line.</figcaption>
+  </figure>
+
+  <h2>Replication files</h2>
+  <ul>
+    <li><a href="cadre_sim.py">cadre_sim.py</a>, the simulation (Python; needs numpy, scipy, pandas)</li>
+    <li><a href="cadre_fig.py">cadre_fig.py</a>, the figure (needs matplotlib)</li>
+    <li>Result tables: <a href="T1_method_comparison.csv">T1 method comparison</a>, <a href="T2_accounting_checks.csv">T2 accounting checks</a>, <a href="T3_illustrative_economy.csv">T3 illustrative economy</a>, <a href="T4_calibration_coefficients.csv">T4 calibration coefficients</a></li>
+  </ul>
+  <p>Run <code>python3 cadre_sim.py 200</code>, then <code>python3 cadre_fig.py</code>. Seeds are fixed; the full run takes about ten minutes.</p>
+</div></main>
+<footer><div class="wrap">© 2026 Tebila Nakelse. Views expressed here are my own. <a href="/">Home</a></div></footer>
+</body>
+</html>
