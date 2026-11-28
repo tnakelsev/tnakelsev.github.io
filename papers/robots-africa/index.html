@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robots in low-income smallholder agriculture: Africa first | Tebila Nakelse</title>
+<meta name="description" content="When do farm robots create jobs in Africa, and when do they destroy them? A plain-language explanation with three calculators, and a policy plan to prepare ahead.">
+<meta name="author" content="Tebila Nakelse">
+<link rel="canonical" href="https://tnakelsev.github.io/papers/robots-africa/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800&family=Red+Hat+Text:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Companion to "Robots in production". Same voice and palette; the picture here is the farm labor calendar:
+   slack most of the year, a shortage at the peak. Everything on the page hangs on that picture. */
+:root{color-scheme:light dark;
+--bg:light-dark(#f4f6fb,#070f26);--panel:light-dark(#ffffff,#0e1a3a);--ink:light-dark(#0f1730,#e8ecf7);
+--mute:light-dark(#4a5578,#a3aecb);--line:light-dark(#d9deec,#24335e);--navy:#0b1f4b;--mag:#e0115f;
+--magsoft:light-dark(#fde6ef,#3a1027);--hum:light-dark(#c9d6f5,#2b4a8f);--blue:#3b6fe0;
+--good:light-dark(#0b6b4f,#5fd3ac);--goodsoft:light-dark(#e3f4ee,#0d2e26)}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.62 "Red Hat Text",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Red Hat Display",system-ui,sans-serif;line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(31px,4.8vw,50px);font-weight:800}
+h2{font-size:clamp(25px,3.1vw,35px);font-weight:800;margin-bottom:14px}
+h3{font-size:20px;font-weight:700;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{max-width:72ch}
+a{color:inherit;text-decoration-color:var(--mag);text-underline-offset:3px}
+.band{padding:clamp(28px,4vw,60px) max(5vw,16px)}
+.wrap{max-width:1180px;margin:0 auto}
+.sec{border-top:1px solid var(--line)}
+.hero{background:var(--navy);color:#fff}
+.hero .lede{font-size:18px;color:#d5dcf0;max-width:60ch;margin-top:16px}
+.by{margin-top:18px;font-size:15px;color:#aeb9da}
+.heroGrid{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+.heroFig{background:#0f2a63;border-radius:14px;padding:18px 18px 12px}
+.heroFig .ct,.heroFig .months,.heroFig .key{color:#c8d1ea}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:10px max(5vw,16px);background:var(--panel);border-bottom:1px solid var(--line)}
+.nav a{flex:none;text-decoration:none;font-size:14px;font-weight:500;padding:10px 12px;border-radius:8px;color:var(--mute)}
+.nav a:hover,.nav a:focus-visible{background:var(--magsoft);color:var(--ink)}
+@media(min-width:900px){.nav{position:sticky;top:0;z-index:5}.heroGrid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center}}
+.eyebrow,.tag{font:700 13px "Red Hat Display",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 8px}
+.take{padding-left:20px;margin:0 0 8px}.take li{margin-bottom:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px;margin:10px 0 16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 6px}
+.card b{display:block;font-family:"Red Hat Display",system-ui,sans-serif;font-size:17px;margin-bottom:6px}
+.card p{font-size:15.5px;color:var(--mute)}
+.card.yes{border-top:3px solid var(--good)}.card.no{border-top:3px solid var(--mag)}.card.mid{border-top:3px solid var(--blue)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;margin:8px 0 8px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi span{display:block;font-size:13.5px;color:var(--mute)}
+.kpi em{font-style:normal;font-family:"Red Hat Display",system-ui,sans-serif;font-weight:800;font-size:clamp(22px,3vw,30px);font-variant-numeric:tabular-nums}
+.kpi.hot em{color:var(--mag)}
+.note{font-size:13.5px;color:var(--mute)}
+.ex{font-size:15.5px;color:var(--mute);border-left:2px solid var(--line);padding-left:14px;max-width:74ch}
+.ex strong{color:var(--ink)}
+.rule{background:var(--magsoft);border-left:3px solid var(--mag);padding:14px 18px;border-radius:0 10px 10px 0;margin:16px 0;max-width:78ch}
+.rule p:last-child{margin:0}
+.formula{font-family:"Red Hat Display",system-ui,sans-serif;font-weight:700;font-size:17px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:10px 0 14px;max-width:72ch;overflow-x:auto}
+.formula small{display:block;font:400 13.5px "Red Hat Text",system-ui,sans-serif;color:var(--mute);margin-top:4px}
+.plus{color:var(--good)}.minus{color:var(--mag)}
+.season{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;height:180px;border-bottom:1px solid #5b6ea3}
+.season i{display:block;border-radius:3px 3px 0 0;background:#c9d6f5}
+.season::after{content:"";position:absolute;left:0;right:0;bottom:50%;border-top:2px dashed #fff}
+.months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;text-align:center;font-size:12px;margin-top:4px}
+.ct{font-size:13.5px;margin:0 0 6px}
+.key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;margin:10px 0 0}
+.key span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:#c9d6f5}
+.key .k2::before{background:var(--mag)}.key .k3::before{height:0;width:16px;border-top:2px dashed #fff;background:none;vertical-align:4px;border-radius:0}
+.two{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;margin-top:6px}
+@media(min-width:960px){.two{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}}
+.sim{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 8px}
+.ctl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;margin-bottom:10px}
+.ctl label{font-size:15px;font-weight:500}
+.ctl output{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.ctl input{grid-column:1/-1;width:100%;height:44px;accent-color:var(--mag)}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+button{font:500 14px "Red Hat Text",system-ui,sans-serif;min-height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover,button:focus-visible{border-color:var(--mag)}
+button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+:focus-visible{outline:2px solid var(--mag);outline-offset:2px}
+.verdict{border-radius:10px;padding:12px 14px;font-size:15.5px;margin-top:10px;background:var(--panel);border:1px solid var(--line)}
+.verdict.good{background:var(--goodsoft);border-color:var(--good)}.verdict.bad{background:var(--magsoft);border-color:var(--mag)}
+.verdict b{display:block;font-family:"Red Hat Display",system-ui,sans-serif;font-size:17px;margin-bottom:2px}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0 16px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"Red Hat Display",system-ui,sans-serif;font-weight:700}
+.horizons{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin:12px 0 18px}
+.hz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:0 18px 8px;overflow:hidden}
+.hz header{margin:0 -18px 12px;padding:12px 18px;background:var(--navy);color:#fff}
+.hz header span{display:block;font-size:13px;color:#aeb9da;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.hz header b{font-family:"Red Hat Display",system-ui,sans-serif;font-size:19px}
+.hz ul{padding-left:18px;margin:0 0 10px}.hz li{margin-bottom:8px;font-size:15.5px}
+.hz .goal{font-size:15.5px;color:var(--mute)}
+.check{counter-reset:c;list-style:none;padding:0;display:grid;gap:10px;max-width:78ch}
+.check li{counter-increment:c;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px 12px 54px;position:relative}
+.check li::before{content:counter(c);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font:700 15px/28px "Red Hat Display",system-ui,sans-serif;text-align:center}
+.check b{display:block}
+.check span{color:var(--mute);font-size:15.5px}
+.refs li{margin-bottom:8px;max-width:80ch;color:var(--mute)}
+.foot{background:var(--navy);color:#c8d1ea;font-size:14px}
+.scroll a{flex:none}
+@media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:block;border:0;padding:3px 0}.stack td::before{content:attr(data-l);display:block;font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)}.stack td:first-child{font-weight:700}.stack td:first-child::before{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="band hero">
+ <div class="wrap heroGrid">
+  <div>
+   <h1>Robots in low-income smallholder agriculture: Africa first</h1>
+   <p class="lede">Farm robots are getting cheap. In a region where labor is abundant and food is imported, will they create jobs or destroy them? This page explains the answer step by step, and ends with a plan to prepare.</p>
+   <p class="by">Tebila Nakelse, PhD · Agricultural and labor economist · Working paper, November 2026</p>
+  </div>
+  <div class="heroFig">
+   <p class="ct">Labor a small farm needs, month by month (illustrative, one rainy season)</p>
+   <div class="season" role="img" aria-label="Bar chart of monthly farm labor needs. Needs are low for most of the year, but exceed the labor the household has at planting in June and July and at harvest in October and November."><i style="height:15%"></i><i style="height:12%"></i><i style="height:15%"></i><i style="height:25%"></i><i style="height:45%"></i><i style="height:85%;background:linear-gradient(to top,#c9d6f5 58.8%,#e0115f 58.8%)"></i><i style="height:95%;background:linear-gradient(to top,#c9d6f5 52.6%,#e0115f 52.6%)"></i><i style="height:45%"></i><i style="height:35%"></i><i style="height:80%;background:linear-gradient(to top,#c9d6f5 62.5%,#e0115f 62.5%)"></i><i style="height:70%;background:linear-gradient(to top,#c9d6f5 71.4%,#e0115f 71.4%)"></i><i style="height:25%"></i></div>
+   <div class="months"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+   <p class="key"><span>Work the household can do</span><span class="k2">Shortage at the peak</span><span class="k3">Labor the household has</span></p>
+  </div>
+ </div>
+</header>
+
+<nav class="nav scroll" aria-label="Sections">
+ <a href="../../">← Home</a><a href="#summary">In one minute</a><a href="#what">1 · What is a farm robot?</a><a href="#why">2 · Why Africa differs</a><a href="#puzzle">3 · The labor puzzle</a><a href="#farm">4 · The farmer’s choice</a><a href="#jobs">5 · Jobs</a><a href="#service">6 · The service business</a><a href="#economy">7 · The whole economy</a><a href="#policy">8 · Policy: plan ahead</a><a href="#refs">Sources</a>
+</nav>
+
+<main>
+<section class="band" id="summary"><div class="wrap">
+ <p class="eyebrow">In one minute</p>
+ <h2>Target the bottleneck, not the robot</h2>
+ <p>Most thinking about robots comes from rich countries, where workers are scarce and expensive. African farming is the opposite case: farms are small, families do most of the work, and wages are low. So the useful question is not “do robots raise productivity?” It is “when do they raise it without destroying the jobs rural people depend on?”</p>
+ <ul class="take">
+  <li><strong>Robots create jobs when they remove a peak-season bottleneck.</strong> If a farm cannot find workers at planting or harvest, land stays idle or work is done late. A robot that does the peak task lets the farm grow more, and that creates work for people in every other task.</li>
+  <li><strong>Robots destroy jobs when they only replace workers who are available and cheap.</strong> Nothing more is produced, and the workers lose their income.</li>
+  <li><strong>Food imports tilt the balance toward jobs.</strong> While a country imports a crop, extra local output replaces imports and prices hold. Farms can then expand without hurting each other.</li>
+  <li><strong>This window will not stay open.</strong> Once a country feeds itself, more robots release labor from farming. Policy should use the window now and prepare for what follows.</li>
+ </ul>
+ <p class="note">This page is the plain-language version of Part 7 of <a href="../robots/">Robots in production</a>, where the full derivations are. The numbers in the examples and calculators are illustrative, not estimates.</p>
+</div></section>
+
+<section class="band sec" id="what"><div class="wrap">
+ <p class="eyebrow">Step 1</p>
+ <h2>What is a “robot” on a small farm?</h2>
+ <p>A tractor needs a driver for every minute it works. A robot is different: it is a machine that carries out a task with little or no human control. On small farms this means things like a drone that sprays or sows a field by itself, a small autonomous weeder, or a self-guided planter or harvester.</p>
+ <p>Two features matter for everything that follows.</p>
+ <div class="cards">
+  <div class="card mid"><b>Robots arrive as a service</b><p>Few smallholders can buy a robot. They pay a provider per hectare, the same way many already hire a tractor or a thresher. So the price that matters is the service fee, not the price of the machine.</p></div>
+  <div class="card mid"><b>Robots do one task, not the whole crop</b><p>A spraying drone does not weed, harvest or carry sacks. Each hectare still needs people for the other tasks. This is why one robot can <em>raise</em> the demand for labor.</p></div>
+ </div>
+ <p>This is no longer a distant prospect. Drone services already cover 30% or more of cropland in China, Japan, South Korea and Thailand, and hiring one usually costs about the same as hiring workers, or less (Belton et al., 2025). A widely used spraying drone sells for about US$5,000 in China. As prices fall, the technology will reach African farms whether or not governments have planned for it.</p>
+</div></section>
+
+<section class="band sec" id="why"><div class="wrap">
+ <p class="eyebrow">Step 2</p>
+ <h2>Why Africa is a different case</h2>
+ <p>Four facts set the scene. Together they explain why results from rich countries cannot simply be copied.</p>
+ <div class="kpis">
+  <div class="kpi hot"><span>Sub-Saharan Africa’s food import bill, 2025 forecast</span><em>US$65 bn</em></div>
+  <div class="kpi"><span>Africa’s urban population, today → 2050</span><em>0.7 → 1.4 bn</em></div>
+  <div class="kpi"><span>Share of farm work still done by hand</span><em>50–85%</em></div>
+  <div class="kpi hot"><span>Young people entering the labor market each year, against 3 million formal jobs</span><em>10–12 million</em></div>
+ </div>
+ <p class="note">Sources: FAO, Food Outlook (November 2025); OECD/SWAC, Africa’s Urbanisation Dynamics 2025; Malabo Montpellier Panel (2018); African Development Bank, cited by ILO (July 2025).</p>
+ <ul>
+  <li><strong>Food demand is outrunning supply.</strong> Cities are set to double in size. African farm output has grown mainly by using more land and more labor, not by producing more per worker or per hectare. Imports fill the gap. They cost foreign exchange and expose countries to world price spikes and supply disruptions.</li>
+  <li><strong>Farming is still done by hand.</strong> This keeps output per worker low. It also means there is a lot of work that machines could, in principle, take over.</li>
+  <li><strong>Jobs are the central worry.</strong> Millions of young people look for work each year and few find formal jobs. A technology that removes farm work without creating other work would make this worse.</li>
+  <li><strong>Farms are small and scattered.</strong> A machine must travel between many small plots, which raises its cost per hectare.</li>
+ </ul>
+</div></section>
+
+<section class="band sec" id="puzzle"><div class="wrap">
+ <p class="eyebrow">Step 3</p>
+ <h2>The labor puzzle: too many workers, and too few</h2>
+ <p>Rural Africa has plenty of labor across the year. Yet farmers often say they cannot find workers. Both statements are true, and the picture at the top of this page shows why.</p>
+ <p>Farm work is not spread evenly. Planting must be done in the few days after the rains start. Harvest must be done before the crop spoils. Neighbours face the same dates, so everyone needs workers at the same time. For a few weeks, labor is short. For the rest of the year, there is little to do.</p>
+ <p>The cost of missing the window is high. Delayed sowing or weeding can cut yields by up to 1% for each day of delay (Malabo Montpellier Panel, 2018). And as young people move to towns, the peaks get tighter.</p>
+ <div class="rule"><p><strong>The key idea.</strong> A useful analysis must hold both facts at once: underemployment on average, and a real labor shortage at the peak. Whether a robot helps or harms depends on which of the two it meets.</p></div>
+</div></section>
+
+<section class="band sec" id="farm"><div class="wrap">
+ <p class="eyebrow">Step 4</p>
+ <h2>The farmer’s choice: is the robot worth its price?</h2>
+ <p>Take one hectare. It needs two kinds of work:</p>
+ <ul>
+  <li><strong>The peak task</strong> (land preparation, planting or harvest), which must be done inside a short window.</li>
+  <li><strong>Other tasks</strong> (weeding, post-harvest handling, marketing), done when labor is easy to find.</li>
+ </ul>
+ <p>A robot service offers to do the peak task for a fee. The farmer compares that fee with the value of the human labor it replaces. The catch is that this value is not always the market wage.</p>
+ <div class="cards">
+  <div class="card no"><b>If workers can be hired at the peak</b><p>An hour of peak labor is worth the market wage. The robot pays only if its fee is below the wage bill it replaces.</p></div>
+  <div class="card yes"><b>If workers cannot be found</b><p>Without the peak task, the hectare produces nothing. So an hour of peak labor is worth the whole net income of the hectare, divided by the hours needed. Economists call this the <em>shadow wage</em>. It can be several times the market wage.</p></div>
+ </div>
+ <p class="ex"><strong>Example.</strong> A hectare yields a crop worth 400. Other tasks cost 300 hours × 0.5 = 150. The peak task needs 150 hours. If no workers can be found at the peak, each peak hour is worth (400 − 150) / 150 ≈ 1.7, more than three times the market wage of 0.5. So the robot service pays at any fee below 250 per hectare, although hired workers would cost only 75 if they were available.</p>
+
+ <h3>Try it: does a robot service pay on this farm?</h3>
+ <div class="two">
+  <div class="sim">
+   <p class="tag">Can the farm find workers at the peak?</p>
+   <div class="seg" role="group" aria-label="Peak labor availability"><button type="button" data-av="1" aria-pressed="false">Yes, at the market wage</button><button type="button" data-av="0" aria-pressed="true">No, they cannot be found</button></div>
+   <div class="ctl"><label for="fv">Value of the crop from one hectare</label><output id="ofv"></output><input id="fv" type="range" min="100" max="1000" step="10" value="400"></div>
+   <div class="ctl"><label for="fa">Peak-task hours per hectare</label><output id="ofa"></output><input id="fa" type="range" min="20" max="400" step="5" value="150"></div>
+   <div class="ctl"><label for="fb">Other-task hours per hectare</label><output id="ofb"></output><input id="fb" type="range" min="20" max="800" step="10" value="300"></div>
+   <div class="ctl"><label for="fw">Hourly wage</label><output id="ofw"></output><input id="fw" type="range" min="0.1" max="2" step="0.05" value="0.5"></div>
+   <div class="ctl"><label for="fq">Robot service fee per hectare</label><output id="ofq"></output><input id="fq" type="range" min="10" max="400" step="5" value="120"></div>
+  </div>
+  <div>
+   <div class="kpis">
+    <div class="kpi"><span>What a peak hour is worth to this farm</span><em id="fS"></em></div>
+    <div class="kpi"><span>Highest fee worth paying</span><em id="fM"></em></div>
+   </div>
+   <div class="verdict" id="fV" aria-live="polite"></div>
+   <p class="note" style="margin-top:10px">Money is in the same unit throughout; think of US dollars. One wage is used for all tasks to keep the example simple.</p>
+  </div>
+ </div>
+
+ <h3>Three situations a farm can be in</h3>
+ <table class="stack">
+  <thead><tr><th>Situation</th><th>What the robot does</th><th>Effect on jobs</th></tr></thead>
+  <tbody>
+   <tr><td>1. Workers are easy to hire at the peak</td><td>It is not worth its fee, so it is adopted only if subsidised</td><td>It takes work from hired laborers, often the landless. Jobs fall.</td></tr>
+   <tr><td>2. Peak shortage, and land is available</td><td>It lets the farm cultivate land that stayed idle</td><td>Each new hectare needs people for all the other tasks. Jobs rise.</td></tr>
+   <tr><td>3. Peak shortage, but all land is used</td><td>It gets the work done on time, which raises yields, or makes a second crop possible</td><td>A bigger harvest adds some work. The net effect depends on what the freed peak labor does next.</td></tr>
+  </tbody>
+ </table>
+</div></section>
+
+<section class="band sec" id="jobs"><div class="wrap">
+ <p class="eyebrow">Step 5</p>
+ <h2>Jobs: created or destroyed?</h2>
+ <p>Now count the hours. When a robot serves one more hectare, labor demand changes in three ways.</p>
+ <div class="cards">
+  <div class="card yes"><b><span class="plus">+</span> Expansion</b><p>If the robot makes new production possible, people are needed for all the other tasks on that hectare.</p></div>
+  <div class="card no"><b><span class="minus">−</span> Displacement</b><p>If the robot does work that people were already doing, those hours are lost.</p></div>
+  <div class="card yes"><b><span class="plus">+</span> New service tasks</b><p>Someone must operate, move, charge and repair the robot.</p></div>
+ </div>
+ <p>Everything turns on one number: <strong>the share of robot work that expands production</strong>, instead of replacing people on work they already did. Call it ψ (psi). It runs from 0, where robots only replace workers, to 1, where every robot-hectare is new production.</p>
+ <div class="formula">Change in work per robot-hectare = <span class="plus">ψ × b</span> <span class="minus">− (1 − ψ) × a</span> <span class="plus">+ e</span>
+  <small>a = peak-task hours per hectare · b = hours of other tasks per hectare · e = service hours each robot-hectare creates</small></div>
+ <div class="formula">Robots create jobs when ψ is above (a − e) / (a + b)</div>
+ <p class="ex"><strong>Example.</strong> With 150 peak hours, 300 other hours and 10 service hours per hectare, the threshold is 140 / 450 ≈ 0.31. So robots create jobs if at least about a third of their work expands production.</p>
+ <p>The threshold is lower, and job creation more likely, when the rest of the crop cycle needs a lot of labor (rice, vegetables, cotton) and when the robot brings many service jobs with it.</p>
+
+ <h3>Try it: net jobs from robot services</h3>
+ <div class="two">
+  <div class="sim">
+   <div class="ctl"><label for="jp">Share of robot work that expands production, ψ</label><output id="ojp"></output><input id="jp" type="range" min="0" max="1" step="0.01" value="0.5"></div>
+   <div class="ctl"><label for="ja">Peak-task hours per hectare, a</label><output id="oja"></output><input id="ja" type="range" min="20" max="400" step="5" value="150"></div>
+   <div class="ctl"><label for="jb">Other-task hours per hectare, b</label><output id="ojb"></output><input id="jb" type="range" min="20" max="800" step="10" value="300"></div>
+   <div class="ctl"><label for="je">Service hours per robot-hectare, e</label><output id="oje"></output><input id="je" type="range" min="0" max="60" step="1" value="10"></div>
+  </div>
+  <div>
+   <div class="kpis">
+    <div class="kpi hot"><span>Net work per 1,000 hectares served</span><em id="jN"></em></div>
+    <div class="kpi"><span>Job-creating threshold for ψ</span><em id="jT"></em></div>
+   </div>
+   <div class="verdict" id="jV" aria-live="polite"></div>
+   <p class="note" style="margin-top:10px">Person-days assume 8-hour days.</p>
+  </div>
+ </div>
+</div></section>
+
+<section class="band sec" id="service"><div class="wrap">
+ <p class="eyebrow">Step 6</p>
+ <h2>Can a robot service business survive?</h2>
+ <p>A robot that would help farmers is useless if no one can make a living providing it. A service provider has a fixed cost each season: the machine, finance, insurance, staff. It earns a margin on every hectare served. To break even it needs enough hectares.</p>
+ <div class="formula">Hectares needed to break even = fixed cost ÷ margin per hectare
+  <small>The provider survives only if this is below what it can serve: the smaller of its capacity (hectares per day × days in the window) and local demand.</small></div>
+ <p>Three features of African farming make this hard:</p>
+ <ul>
+  <li><strong>Short windows.</strong> If planting lasts three weeks, the robot earns for three weeks and sits idle the rest of the year.</li>
+  <li><strong>Scattered plots.</strong> Travel between small fields eats into the margin.</li>
+  <li><strong>Thin demand.</strong> Too few paying farmers within reach.</li>
+ </ul>
+
+ <h3>Try it: does the provider break even?</h3>
+ <div class="two">
+  <div class="sim">
+   <div class="ctl"><label for="sF">Fixed cost per season</label><output id="osF"></output><input id="sF" type="range" min="500" max="20000" step="250" value="6000"></div>
+   <div class="ctl"><label for="sM">Margin per hectare (fee minus running cost)</label><output id="osM"></output><input id="sM" type="range" min="5" max="200" step="5" value="40"></div>
+   <div class="ctl"><label for="sK">Hectares served per day</label><output id="osK"></output><input id="sK" type="range" min="1" max="40" step="1" value="6"></div>
+   <div class="ctl"><label for="sW">Working days in the year</label><output id="osW"></output><input id="sW" type="range" min="5" max="150" step="1" value="20"></div>
+   <div class="ctl"><label for="sD">Local demand, hectares</label><output id="osD"></output><input id="sD" type="range" min="50" max="3000" step="50" value="400"></div>
+  </div>
+  <div>
+   <div class="kpis">
+    <div class="kpi"><span>Hectares needed to break even</span><em id="sU"></em></div>
+    <div class="kpi"><span>Hectares it can actually serve</span><em id="sC"></em></div>
+   </div>
+   <div class="verdict" id="sV" aria-live="polite"></div>
+   <p class="note" style="margin-top:10px">With the starting values the provider loses money. Raise the working days from 20 to 30, for example by serving a second crop or a second zone, and it becomes viable.</p>
+  </div>
+ </div>
+ <p style="margin-top:16px">The remedies follow directly: robots that do several tasks across the year, providers that move between zones as seasons shift, farms grouped through cooperatives or aggregators so that plots are close together, and finance that spreads the fixed cost over several years.</p>
+</div></section>
+
+<section class="band sec" id="economy"><div class="wrap">
+ <p class="eyebrow">Step 7</p>
+ <h2>The whole economy: imports change the answer</h2>
+ <p>So far we looked at one farm. For a country, the question is what happens when many farms produce more at once. Farm jobs follow a simple rule:</p>
+ <div class="formula">Growth in farm jobs = growth in farm output − growth in output per worker</div>
+ <p>Robots raise output per worker. So farm jobs can only grow if output grows even faster. Whether it can depends on where the extra food goes.</p>
+ <div class="cards">
+  <div class="card yes"><b>While the country imports the crop</b><p>The local price is set by the cost of imports. Extra local output replaces imports and the price holds. Farms can expand a lot, so jobs can rise even with robots. This is today’s situation for rice, wheat and vegetable oils in much of Africa.</p></div>
+  <div class="card no"><b>Once the country feeds itself</b><p>Extra output has nowhere to go, so the price falls. People do not eat much more when food gets cheaper, so output can grow only slowly. Higher productivity then pushes labor out of farming. Consumers gain, but the jobs must come from other sectors.</p></div>
+ </div>
+ <p>Farm jobs are also only part of the story. Robots affect employment through four channels:</p>
+ <ol>
+  <li><strong>Jobs on farms</strong>, as above.</li>
+  <li><strong>Jobs in robot services</strong>: operators, mechanics, logistics.</li>
+  <li><strong>Jobs in processing and trade</strong>. More local grain means more milling, storage, transport and retail.</li>
+  <li><strong>Jobs from cheaper food</strong>. Households that spend less on food buy other things.</li>
+ </ol>
+ <p>The largest gains are likely in channels 2 and 3. And every tonne that replaces an import saves foreign exchange.</p>
+ <p class="ex"><strong>A lesson from Brazil.</strong> When a labor-saving technology spread in soy farming, workers left agriculture and industry grew. When a technology that let farmers grow a second maize crop spread, labor stayed on farms (Bustos, Caprettini and Ponticelli, 2016). The type of technology decided where the workers went.</p>
+
+ <h3>When robots help, and when they don’t</h3>
+ <table class="stack">
+  <thead><tr><th>Robots help when…</th><th>Robots don’t help when…</th></tr></thead>
+  <tbody>
+   <tr><td>A peak-season shortage leaves land idle or work late</td><td data-l="But not when">Labor is plentiful and cheap at the peak</td></tr>
+   <tr><td>The task is one people do badly: precise spraying, scouting, dangerous or exhausting work</td><td data-l="But not when">The robot only matches people on cost</td></tr>
+   <tr><td>The country imports the crop, so output replaces imports</td><td data-l="But not when">The market is full and extra output pushes prices down</td></tr>
+   <tr><td>Services are shared, farms are grouped and the working season is long</td><td data-l="But not when">Plots are scattered, windows short, and repair or energy unreliable</td></tr>
+   <tr><td>The rest of the value chain needs many workers (processing, vegetables)</td><td data-l="But not when">Displaced workers are landless and have nowhere else to go</td></tr>
+  </tbody>
+ </table>
+</div></section>
+
+<section class="band sec" id="policy"><div class="wrap">
+ <p class="eyebrow">Step 8</p>
+ <h2>Policy: plan ahead</h2>
+ <p>The analysis gives one rule and one warning.</p>
+ <div class="rule"><p><strong>The rule: target the bottleneck, not the robot.</strong> Public money should go where a labor shortage is holding production back, and where the extra output has a market. A robot is worth supporting only for what it unblocks.</p></div>
+ <div class="rule"><p><strong>The warning: the favourable window is temporary.</strong> Today, import dependence and idle land make job-creating automation possible. As a country closes its food gap, the same robots start to release labor. A plan must cover both phases.</p></div>
+
+ <h3>A plan in three horizons</h3>
+ <div class="horizons">
+  <div class="hz"><header><span>Now to 2 years</span><b>Prepare</b></header>
+   <p class="goal">Goal: know where the bottlenecks are before the machines arrive.</p>
+   <ul>
+    <li><strong>Map labor calendars</strong> by crop and zone. Where is land idle, or planted late, for lack of peak labor?</li>
+    <li><strong>Write clear rules</strong> for drones and autonomous machines: licensing, safety, spray drift, and who owns the farm data.</li>
+    <li><strong>Pilot through service providers</strong>, not equipment giveaways. In each pilot, measure how much of the robot’s work expands production.</li>
+    <li><strong>Stop subsidising machines that replace available workers.</strong> They cost public money and destroy jobs.</li>
+   </ul>
+  </div>
+  <div class="hz"><header><span>2 to 7 years</span><b>Build the service market</b></header>
+   <p class="goal">Goal: make robot services viable where they create jobs.</p>
+   <ul>
+    <li><strong>Finance the providers</strong>: leasing, pay-per-hectare contracts and credit guarantees.</li>
+    <li><strong>Group the demand</strong> through cooperatives, aggregators and block farming, so providers reach break-even.</li>
+    <li><strong>Train young people</strong> as operators, mechanics and data technicians. These are the new service jobs.</li>
+    <li><strong>Fix the basics</strong>: rural energy, connectivity and a reliable supply of spare parts.</li>
+    <li><strong>Start with import-competing crops</strong> such as rice, wheat and oilseeds, and invest in local processing so the value-chain jobs stay in the country.</li>
+   </ul>
+  </div>
+  <div class="hz"><header><span>7 to 15 years</span><b>Manage the transition</b></header>
+   <p class="goal">Goal: be ready when farming starts to release labor.</p>
+   <ul>
+    <li><strong>Open new markets</strong>, regional and export, before the home market is full. This keeps output growing and extends the job-creating phase.</li>
+    <li><strong>Build jobs off the farm</strong>: agro-processing, rural services and secondary towns that can absorb workers.</li>
+    <li><strong>Protect those who lose work</strong>, especially landless and seasonal workers: safety nets, retraining and access to land.</li>
+    <li><strong>Spread ownership</strong> through cooperatives and youth-owned service firms, so robot income does not concentrate in a few hands.</li>
+   </ul>
+  </div>
+ </div>
+
+ <h3>Signals to watch</h3>
+ <p>A plan needs indicators that say when to move from one horizon to the next. Most of these can be collected in existing farm surveys.</p>
+ <table class="stack">
+  <thead><tr><th>Signal</th><th>What it tells you</th><th>What to do</th></tr></thead>
+  <tbody>
+   <tr><td>Peak-season wage compared with the off-season wage</td><td>A rising gap means the bottleneck is tightening</td><td>Robots are more likely to create jobs here. Prioritise these zones and tasks.</td></tr>
+   <tr><td>Share of land left idle or planted late</td><td>How much robot work would expand production</td><td>High: support services. Low: do not subsidise.</td></tr>
+   <tr><td>Robot fee per hectare compared with the cost of peak labor</td><td>How close adoption is to taking off without support</td><td>When the two meet, have rules, skills and finance already in place.</td></tr>
+   <tr><td>Days a provider’s machine works per year</td><td>Whether the service business is viable</td><td>Low: promote multi-task machines and movement between zones.</td></tr>
+   <tr><td>Import share of each staple</td><td>How much room is left before prices start to fall</td><td>As it nears zero, shift effort to exports and off-farm jobs.</td></tr>
+   <tr><td>Earnings of landless and seasonal workers</td><td>Who is losing from automation</td><td>Falling: trigger support and retraining.</td></tr>
+  </tbody>
+ </table>
+
+ <h3>Five questions before funding a robot programme</h3>
+ <ol class="check">
+  <li><b>Which task, and is labor really short for it at that time of year?</b><span>If workers are available, stop here.</span></li>
+  <li><b>Where will the extra output go?</b><span>It should replace imports or have a buyer. Otherwise prices fall and farmers lose.</span></li>
+  <li><b>Does the robot do the task much better, or only slightly cheaper?</b><span>Small savings do not make up for lost wages.</span></li>
+  <li><b>Who will own and run it, and can they break even?</b><span>Check the working days per year, the distance between plots and the repair chain.</span></li>
+  <li><b>Who loses work, and what is planned for them?</b><span>Name the group and fund the response before the programme starts.</span></li>
+ </ol>
+
+ <h3>What this analysis does not tell us yet</h3>
+ <p>This is theory. It shows which conditions matter and in which direction, but it does not measure them. Two numbers need field evidence before large programmes are designed: the share of robot work that expands production in each farming system, and the days per year a provider can work. Both can be measured in pilots, which is one more reason to start with them.</p>
+</div></section>
+
+<section class="band sec" id="refs"><div class="wrap">
+ <h2>Sources</h2>
+ <ol class="refs">
+  <li>African Development Bank, cited in ILO News (15 July 2025). <a href="https://www.ilo.org/resource/news/afdb-ilo-to-prioritize-investing-in-africas-young-people">African Development Bank Group to introduce changes to prioritize investing in Africa’s young people</a>.</li>
+  <li>Belton, B., Baldiga, L., Justice, S., Minten, B., Narayanan, S. and Reardon, T. (2025). Can the global drone revolution make agriculture more sustainable? <em>Science</em>, 389(6764), 972–976. Summary: <a href="https://www.ifpri.org/blog/the-global-drone-revolution-in-agriculture/">IFPRI blog</a>.</li>
+  <li>Bustos, P., Caprettini, B. and Ponticelli, J. (2016). Agricultural productivity and structural transformation: evidence from Brazil. <em>American Economic Review</em>, 106(6).</li>
+  <li>FAO (November 2025). <em>Food Outlook</em>. Figures as reported in <a href="https://www.foodbusinessmea.com/sub-saharan-africa-food-imports-to-reach-us65-billion-in-2025-fao/">Food Business MEA</a>.</li>
+  <li>Fuglie, K. and Rada, N. (2013). <em>Resources, Policies, and Agricultural Productivity in Sub-Saharan Africa</em>. USDA Economic Research Service, ERR-145.</li>
+  <li>Malabo Montpellier Panel (2018). <a href="https://akademiya2063.org/publications/mamo/EN/Mechanized/Mechanized_Report_2018_ENG.pdf"><em>Mechanized: Transforming Africa’s Agriculture Value Chains</em></a>.</li>
+  <li>OECD/SWAC and partners (2025). <a href="https://www.oecd.org/en/publications/africa-s-urbanisation-dynamics-2025_2a47845c-en.html"><em>Africa’s Urbanisation Dynamics 2025: Planning for Urban Expansion</em></a>. OECD Publishing.</li>
+  <li>Pingali, P. (2007). Agricultural mechanization: adoption patterns and economic impact. <em>Handbook of Agricultural Economics</em>, Vol. 3.</li>
+  <li>Singh, I., Squire, L. and Strauss, J. (1986). <em>Agricultural Household Models</em>. Johns Hopkins University Press.</li>
+  <li>Wollburg, P., Bentze, T., Lu, Y., Udry, C. and Gollin, D. (2023). Agricultural productivity growth in Africa: new evidence from microdata. World Bank working paper.</li>
+ </ol>
+ <p class="note">For the formal models behind each step, see Part 7 of <a href="../robots/#africa">Robots in production</a>.</p>
+</div></section>
+</main>
+
+<footer class="band foot"><div class="wrap">© 2026 Tebila Nakelse. Working paper — comments welcome. Calculator values are illustrative, not estimates. The views expressed are the author’s own.</div></footer>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const n0=v=>Math.round(v).toLocaleString('en-US');
+const say=(el,cls,head,text)=>{el.className='verdict '+cls;el.innerHTML='<b>'+head+'</b>'+text;};
+
+/* 1. farm decision */
+let avail=false;
+function farm(){
+ const v=+$('fv').value,a=+$('fa').value,b=+$('fb').value,w=+$('fw').value,q=+$('fq').value;
+ $('ofv').textContent=n0(v);$('ofa').textContent=a;$('ofb').textContent=b;$('ofw').textContent=w.toFixed(2);$('ofq').textContent=n0(q);
+ const net=v-b*w, el=$('fV');
+ if(avail){
+  const bill=a*w;$('fS').textContent=w.toFixed(2);$('fM').textContent=n0(bill);
+  if(q<bill)say(el,'bad','The robot replaces hired workers','Its fee ('+n0(q)+') is below the wage bill for the peak task ('+n0(bill)+'). The farm adopts it, and workers lose '+a+' hours per hectare. Nothing more is produced.');
+  else say(el,'','Workers are cheaper, so the farm does not adopt','The peak task costs '+n0(bill)+' with people and '+n0(q)+' with the robot. A subsidy large enough to change this would destroy jobs for little gain.');
+ }else{
+  if(net<=0){$('fS').textContent='0';$('fM').textContent='0';say(el,'','This hectare does not pay','The crop is worth less than the cost of the other tasks, so the land stays idle with or without a robot.');return;}
+  $('fS').textContent=(net/a).toFixed(2);$('fM').textContent=n0(net);
+  const x=(net/a/w);
+  if(q<net)say(el,'good','The robot pays, and it creates work','A peak hour is worth '+x.toFixed(1)+' times the market wage here, because without it the hectare lies idle. At a fee of '+n0(q)+' the farm adopts, the hectare comes into production, and people are needed for '+b+' hours of other tasks.');
+  else say(el,'','The robot is still too expensive','The hectare would earn '+n0(net)+' after other costs, less than the fee of '+n0(q)+'. The land stays idle until the fee falls.');
+ }
+}
+document.querySelectorAll('[data-av]').forEach(bn=>bn.addEventListener('click',()=>{avail=bn.dataset.av==='1';document.querySelectorAll('[data-av]').forEach(o=>o.setAttribute('aria-pressed',String(o===bn)));farm();}));
+['fv','fa','fb','fw','fq'].forEach(id=>$(id).addEventListener('input',farm));farm();
+
+/* 2. net jobs */
+function jobs(){
+ const p=+$('jp').value,a=+$('ja').value,b=+$('jb').value,e=+$('je').value;
+ $('ojp').textContent=p.toFixed(2);$('oja').textContent=a;$('ojb').textContent=b;$('oje').textContent=e;
+ const d=p*b-(1-p)*a+e,pd=d*1000/8,t=Math.max(0,(a-e)/(a+b));
+ $('jN').textContent=(pd>=0?'+':'−')+n0(Math.abs(pd))+' person-days';$('jT').textContent=t.toFixed(2);
+ if(d>=0)say($('jV'),'good','Robots create jobs here','Expansion adds '+n0(p*b)+' hours per hectare and services add '+e+'. Displacement removes '+n0((1-p)*a)+'.');
+ else say($('jV'),'bad','Robots destroy jobs here','Displacement removes '+n0((1-p)*a)+' hours per hectare. Expansion adds only '+n0(p*b)+' and services '+e+'.');
+}
+['jp','ja','jb','je'].forEach(id=>$(id).addEventListener('input',jobs));jobs();
+
+/* 3. service provider */
+function serv(){
+ const F=+$('sF').value,M=+$('sM').value,K=+$('sK').value,W=+$('sW').value,D=+$('sD').value;
+ $('osF').textContent=n0(F);$('osM').textContent=M;$('osK').textContent=K;$('osW').textContent=W;$('osD').textContent=n0(D);
+ const U=F/M,cap=K*W,can=Math.min(cap,D);
+ $('sU').textContent=n0(U);$('sC').textContent=n0(can);
+ const lim=cap<=D?'its capacity ('+K+' hectares a day for '+W+' days)':'local demand';
+ if(can>=U)say($('sV'),'good','The provider breaks even','It can serve '+n0(can)+' hectares and needs '+n0(U)+'. Profit for the season: '+n0((can-U)*M)+'. What limits it is '+lim+'.');
+ else say($('sV'),'bad','The provider loses money','It needs '+n0(U)+' hectares but can serve only '+n0(can)+'. What limits it is '+lim+'.');
+}
+['sF','sM','sK','sW','sD'].forEach(id=>$(id).addEventListener('input',serv));serv();
+
+/* labels for stacked tables on phones */
+for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}
+}
+</script>
+</body>
+</html>
