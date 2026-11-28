@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robots in production: a unified theory of automation, work and households | Tebila Nakelse</title>
+<meta name="description" content="Working paper. Three nested models of robots in production, solved for firm and household choices, with an application to African smallholder agriculture and an interactive simulator.">
+<meta name="author" content="Tebila Nakelse">
+<link rel="canonical" href="https://tnakelsev.github.io/papers/robots/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800&family=Red+Hat+Text:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{skipHtmlTags:['script','style','textarea']}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+/* VOICE: a serious working paper from a senior economist — calm, exact, confident.
+   IDEA: a lab poster for a theory paper — the task line (robots vs humans) organises everything.
+   PICTURE: the task frontier: a band of tasks, the automation frontier I moving right, new tasks N appearing.
+   COLOUR and TYPE: oxford blue band, white panels, magenta for results; Red Hat Display + Red Hat Text.
+   LAYOUT: title band with diagram, key results row, numbered model sections, live simulator, policy, references. */
+:root{color-scheme:light dark;
+--bg:light-dark(#f4f6fb,#070f26);--panel:light-dark(#ffffff,#0e1a3a);--ink:light-dark(#0f1730,#e8ecf7);
+--mute:light-dark(#4a5578,#a3aecb);--line:light-dark(#d9deec,#24335e);--navy:#0b1f4b;--mag:#e0115f;
+--magsoft:light-dark(#fde6ef,#3a1027);--hum:light-dark(#c9d6f5,#2b4a8f);--rob:#e0115f}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.62 "Red Hat Text",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Red Hat Display",system-ui,sans-serif;line-height:1.08;text-wrap:balance;margin:0}
+h1{font-size:clamp(32px,5vw,52px);font-weight:800}
+h2{font-size:clamp(26px,3.2vw,36px);font-weight:800;margin-bottom:14px}
+h3{font-size:20px;font-weight:700;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+a{color:inherit}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.hero{background:var(--navy);color:#fff}
+.hero .lede{font-size:18px;color:#d5dcf0;max-width:62ch;margin-top:16px}
+.by{margin-top:18px;font-size:15px;color:#aeb9da}
+.heroGrid{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+.fig{position:relative;min-height:340px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+#hero{min-height:300px;background:#0f2a63;border-radius:14px}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:10px max(5vw,16px);background:var(--panel);border-bottom:1px solid var(--line)}
+.nav a{flex:none;text-decoration:none;font-size:14px;font-weight:500;padding:10px 12px;border-radius:8px;color:var(--mute)}
+.nav a:hover,.nav a:focus-visible{background:var(--magsoft);color:var(--ink)}
+@media(min-width:900px){.nav{position:sticky;top:0;z-index:5}}
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px;margin-top:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px}
+.card b{display:block;font-family:"Red Hat Display";font-size:17px;margin-bottom:6px}
+.card p{font-size:15.5px;color:var(--mute)}
+.sec{border-top:1px solid var(--line)}
+.prop{background:var(--magsoft);border-left:3px solid var(--mag);padding:14px 18px;border-radius:0 10px 10px 0;margin:16px 0;max-width:78ch}
+.prop strong{color:var(--mag)}
+.eq{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:2px 0}
+.two{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+@media(min-width:960px){.two{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}.heroGrid{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center}}
+.sim{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.ctl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;margin-bottom:12px}
+.ctl label{font-size:15px;font-weight:500}
+.ctl output{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.ctl input{grid-column:1/-1;width:100%;height:44px;accent-color:var(--mag)}
+.ctl small{grid-column:1/-1;color:var(--mute);font-size:13px;margin-top:-6px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:6px 0 14px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi span{display:block;font-size:13px;color:var(--mute)}
+.kpi em{font-style:normal;font-family:"Red Hat Display";font-weight:800;font-size:clamp(22px,3vw,30px);font-variant-numeric:tabular-nums;white-space:nowrap}
+.kpi.hot em{color:var(--mag)}
+.regime{padding:10px 14px;border-radius:10px;font-size:15px;margin-bottom:12px;background:var(--bg)}
+.regime.g{background:var(--magsoft);color:var(--ink);border:1px solid var(--mag)}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.charts .fig{min-height:200px}
+.ct{font-size:13px;color:var(--mute);margin:0 0 2px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+button{font:500 14px "Red Hat Text";min-height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover,button:focus-visible{border-color:var(--mag)}
+:focus-visible{outline:2px solid var(--mag);outline-offset:2px}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0 16px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"Red Hat Display";font-weight:700}
+.refs li{margin-bottom:8px;max-width:80ch;color:var(--mute)}
+.foot{background:var(--navy);color:#c8d1ea;font-size:14px}
+.note{font-size:13px;color:var(--mute)}
+pre,.scroll{overflow-x:auto}.scroll a{flex:none}code{overflow-wrap:anywhere}html{scroll-padding-top:72px}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;font-weight:700}.stack td:empty{display:none}.charts{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+
+<header class="band hero">
+ <div class="wrap heroGrid">
+  <div>
+   <h1>Robots in production: a unified theory of automation, work and households</h1>
+   <p class="lede">Three nested models — a fully robotic firm, robots working with people, and robots combined with capital and skills — solved for firm and household choices. One question runs through all of them: when do robots raise wages, and when do they replace workers?</p>
+   <p class="by">Tebila Nakelse, PhD · Agricultural and labor economist · Working paper, November 2026</p>
+  </div>
+  <div class="fig" id="hero" role="img" aria-label="Task line: tasks below the automation frontier I are done by robots, tasks above it by people; automation moves I right, new tasks move N right"></div>
+ </div>
+</header>
+
+<nav class="nav scroll" aria-label="Sections">
+ <a href="../../">← Home</a><a href="#results">Key results</a><a href="#m1">1 · Robot-only firm</a><a href="#m2">2 · Robots + labor</a><a href="#m3">3 · Robots + capital + labor</a><a href="#firm">4 · Firm adoption</a><a href="#hh">5 · Households</a><a href="#ge">6 · Equilibrium</a><a href="#africa">7 · African agriculture</a><a href="#sim">Simulator</a><a href="#policy">Policy</a><a href="#refs">References</a>
+</nav>
+
+<main>
+<section class="band" id="results"><div class="wrap">
+ <h2>Seven results the model delivers</h2>
+ <div class="results">
+  <div class="card"><b>1. Robot demand follows a user-cost rule</b><p>A firm adds robots until one more robot earns its rental cost: price × (interest + depreciation + expected price decline) + running costs. Expected cheaper robots tomorrow delay adoption today.</p></div>
+  <div class="card"><b>2. A fully robotic economy behaves like an AK model</b><p>If robots alone produce with constant returns, growth no longer depends on population. It depends only on robot productivity relative to robot price.</p></div>
+  <div class="card"><b>3. Wages and labor share can move apart</b><p>With factor-augmenting robots, cheaper robots always raise long-run wages, yet cut the labor share whenever robots and workers are substitutes (σ &gt; 1).</p></div>
+  <div class="card"><b>4. Automation can lower wages</b><p>In the task model, automating a task lowers wages during the transition unless the cost saving beats the displacement effect. “So-so” robots — barely cheaper than people — hurt workers.</p></div>
+  <div class="card"><b>5. Robots widen the skill premium if σ &gt; ε</b><p>When robots replace routine labor more easily than skilled labor replaces the routine bundle, every robot raises the pay gap between skilled and unskilled workers.</p></div>
+  <div class="card"><b>6. Who adopts depends on firm size and household labor</b><p>Only firms above a productivity threshold adopt. In farm households with thin labor markets, labor-scarce households adopt robot services first.</p></div>
+  <div class="card"><b>7. In food-importing Africa, farm robots can create jobs</b><p>When robots relieve peak-season bottlenecks and their output replaces imports, total employment can rise. When they only replace cheap labor in saturated markets, jobs fall.</p></div>
+ </div>
+</div></section>
+
+<section class="band sec" id="m1"><div class="wrap">
+ <h2>Model 1 — The fully robotic firm</h2>
+ <p>Start with the simplest case: a firm that produces only with robots. This isolates the economics of the machine itself, before people enter the picture.</p>
+ <h3>Static problem</h3>
+ <p>Output is \(Y = A R^{\theta}\), where \(R\) is the robot stock, \(A\) is technology and \(0&lt;\theta&lt;1\) captures limited space, management or demand. The firm rents robots at the user cost \(c_R\):</p>
+ <div class="eq">\[ c_R = p_R\left(r + \delta_R - \hat{p}_R\right) + m \]</div>
+ <p>Here \(p_R\) is the robot price, \(r\) the interest rate, \(\delta_R\) depreciation, \(\hat p_R\) the expected growth rate of robot prices and \(m\) maintenance and energy per robot. Because robot prices usually fall (\(\hat p_R&lt;0\)), expected obsolescence <em>adds</em> to the cost of owning one today.</p>
+ <p>The firm maximises \(\pi = A R^{\theta} - c_R R\). The first-order condition \(\theta A R^{\theta-1} = c_R\) gives the optimum:</p>
+ <div class="eq">\[ R^{*} = \left(\frac{\theta A}{c_R}\right)^{\frac{1}{1-\theta}}, \qquad Y^{*} = A^{\frac{1}{1-\theta}}\left(\frac{\theta}{c_R}\right)^{\frac{\theta}{1-\theta}}, \qquad \pi^{*} = (1-\theta)\,Y^{*} \]</div>
+ <div class="prop"><strong>Proposition 1.</strong> Robot demand has elasticity \(-1/(1-\theta)\) with respect to user cost. A 10% fall in robot prices raises the robot stock by more than 10%, and by much more when returns are close to constant (\(\theta \to 1\)).</div>
+ <h3>Dynamic problem</h3>
+ <p>Over time, the firm invests \(I_t\), with \(\dot R = I - \delta_R R\), and pays a convex cost \(\tfrac{\phi}{2}(\dot R/R)^2R\) whenever it changes its robot stock. The shadow value of a robot \(q\) gives Tobin’s q rule \(\dot R/R = (q - p_R)/\phi\). In steady state the stock is constant, so \(q=p_R\), and the dynamic optimum collapses to the static rule \(\theta A R^{\theta-1}=c_R\). So the static solution is the long-run target, and adjustment costs only set the speed of approach.</p>
+ <h3>Constant returns: the automation growth engine</h3>
+ <p>Now let \(\theta=1\), so \(Y = A_R R\). There is no interior optimum: if \(A_R &gt; c_R\), each robot earns a pure profit and the firm expands without limit. In general equilibrium, households own the robots and save according to the Euler equation with risk aversion \(\eta\) and time preference \(\rho\):</p>
+ <div class="eq">\[ g = \frac{\dot C}{C} = \frac{1}{\eta}\left(\frac{A_R}{p_R} - \delta_R - \rho\right) \]</div>
+ <div class="prop"><strong>Proposition 2.</strong> A fully automated economy is an AK economy. Its growth rate depends on robot productivity per unit of robot price, not on population or labor. This is the theoretical benchmark against which every mixed system below is measured.</div>
+</div></section>
+
+<section class="band sec" id="m2"><div class="wrap">
+ <h2>Model 2 — Robots working with people</h2>
+ <p>People now enter. There are two standard ways to model this, and they lead to different conclusions, so we solve both.</p>
+ <h3>2A. Robots as a factor (CES)</h3>
+ <div class="eq">\[ Y = A\left[\omega L^{\frac{\sigma-1}{\sigma}} + (1-\omega)(\gamma R)^{\frac{\sigma-1}{\sigma}}\right]^{\frac{\sigma}{\sigma-1}} \]</div>
+ <p>\(\sigma\) is the elasticity of substitution between labor and robots, \(\omega\) the labor weight and \(\gamma\) robot efficiency. Cost minimisation at wage \(w\) and user cost \(c_R\) gives the optimal robot-labor ratio and the labor share of costs:</p>
+ <div class="eq">\[ \frac{R}{L} = \gamma^{\sigma-1}\left(\frac{1-\omega}{\omega}\right)^{\sigma}\left(\frac{w}{c_R}\right)^{\sigma}, \qquad s_L = \frac{\omega^{\sigma}w^{1-\sigma}}{\omega^{\sigma}w^{1-\sigma} + (1-\omega)^{\sigma}(c_R/\gamma)^{1-\sigma}} \]</div>
+ <p>So the firm’s choice is governed by one relative price, \(w/c_R\). When robots get cheaper, firms shift toward them, and the labor share falls if and only if \(\sigma&gt;1\).</p>
+ <h3>2B. Robots as task performers (task-based)</h3>
+ <p>Production combines a continuum of tasks \(i\in[N-1,N]\): \(\ln Y = \int_{N-1}^{N}\ln y(i)\,di\). A task can use labor with productivity \(\gamma_L(i)\) or, if it is technically automatable (\(i\le I\)), robots with productivity \(\gamma_R(i)\). People have a comparative advantage in higher-indexed tasks: \(\gamma_L(i)/\gamma_R(i)\) rises with \(i\).</p>
+ <p>The firm automates a task when robots are cheaper per unit of task output. Let \(r_R\) be the market rental rate of a robot. In the short run the robot stock is given and \(r_R\) clears the robot market. In the long run new robots are built until \(r_R\) falls to the user cost \(c_R\). The profitable threshold \(\tilde I\) and the equilibrium frontier \(I^*\) are:</p>
+ <div class="eq">\[ \frac{w}{\gamma_L(\tilde I)} = \frac{r_R}{\gamma_R(\tilde I)}, \qquad I^{*} = \min\{I,\ \tilde I\}, \qquad s_L = N - I^{*} \]</div>
+ <p>Each task receives an equal share of spending, so labor’s share is simply the share of tasks people still perform. Holding the stocks of robots and labor fixed, the wage effect of automating more tasks splits into two forces:</p>
+ <div class="eq">\[ \frac{d\ln w}{dI} = \underbrace{\ln\!\left(\frac{w/\gamma_L(I)}{r_R/\gamma_R(I)}\right)}_{\text{productivity effect}\ \ge 0} \;-\; \underbrace{\frac{1}{N-I}}_{\text{displacement effect}} \]</div>
+ <div class="prop"><strong>Proposition 3.</strong> While the robot stock is fixed, automation raises wages only if its cost saving exceeds \(1/(N-I)\). “So-so” automation — robots barely cheaper than people — lowers wages and the labor share together. In the long run, as robots accumulate until \(r_R=c_R\), the wage recovers: \(d\ln w/dI = \ln\!\big(\tfrac{w/\gamma_L}{c_R/\gamma_R}\big)/(N-I)\ge 0\). The labor share, however, stays lower at \(N-I\). Creating new tasks (raising \(N\)) has the opposite <em>reinstatement effect</em>: it lifts both wages and the labor share.</div>
+ <p>This is the central contrast. In 2A, more robots always raise wages. In 2B, automation can lower wages during the transition, which may last years, and it lowers labor’s share for good unless new tasks appear. The calculator in the simulator section lets you test the short-run threshold directly.</p>
+</div></section>
+
+<section class="band sec" id="m3"><div class="wrap">
+ <h2>Model 3 — Robots, capital and people together</h2>
+ <p>Real production systems mix three inputs: traditional capital \(K\) (buildings, tractors, land improvements), robots \(R\) and labor \(L\). Robots compete with routine labor inside an automation bundle \(X\), and that bundle combines with capital:</p>
+ <div class="eq">\[ Y = A K^{\alpha} X^{1-\alpha}, \qquad X = \left[\omega L^{\frac{\sigma-1}{\sigma}} + (1-\omega)(\gamma R)^{\frac{\sigma-1}{\sigma}}\right]^{\frac{\sigma}{\sigma-1}} \]</div>
+ <h3>Solving the firm’s problem</h3>
+ <p>With capital rented at \(c_K=r+\delta_K\), the capital condition \(\alpha Y/K = c_K\) can be substituted out. Output becomes linear in the bundle, \(Y = \Psi X\), with</p>
+ <div class="eq">\[ \Psi = A^{\frac{1}{1-\alpha}}\left(\frac{\alpha}{c_K}\right)^{\frac{\alpha}{1-\alpha}} \]</div>
+ <p>After capital is paid, a unit of the bundle is worth \(\tilde\Psi = (1-\alpha)\Psi\). The robot condition \(\tilde\Psi\,\partial X/\partial R = c_R\) then has a closed-form solution for \(s\), the robots’ share of the bundle:</p>
+ <div class="eq">\[ s = (1-\omega)^{\sigma}\left(\frac{\gamma\tilde\Psi}{c_R}\right)^{\sigma-1}, \qquad \frac{X}{L} = \left(\frac{\omega}{1-s}\right)^{\frac{\sigma}{\sigma-1}} \]</div>
+ <p>Factor shares and the wage follow directly:</p>
+ <div class="eq">\[ \text{capital: }\alpha, \qquad \text{robots: }(1-\alpha)s, \qquad \text{labor: }(1-\alpha)(1-s), \qquad w = \tilde\Psi\,\omega^{\frac{\sigma}{\sigma-1}}(1-s)^{-\frac{1}{\sigma-1}} \]</div>
+ <div class="prop"><strong>Proposition 4.</strong> In the long run, a fall in robot cost always raises the wage, for any \(\sigma\). But it lowers the labor share when \(\sigma&gt;1\) and raises it when \(\sigma&lt;1\). Workers can be better off in absolute terms while losing ground relative to capital and robot owners.</div>
+ <h3>Adding skills</h3>
+ <p>Split labor into skilled \(H\) and routine \(L\). Skilled workers combine with the automation bundle with elasticity \(\varepsilon\):</p>
+ <div class="eq">\[ Y = A K^{\alpha}\left[\mu H^{\frac{\varepsilon-1}{\varepsilon}} + (1-\mu)X^{\frac{\varepsilon-1}{\varepsilon}}\right]^{\frac{(1-\alpha)\varepsilon}{\varepsilon-1}}, \qquad \frac{w_H}{w_L} = \frac{\mu}{(1-\mu)\,\omega}\,H^{-\frac{1}{\varepsilon}}\,X^{\frac{1}{\varepsilon}-\frac{1}{\sigma}}\,L^{\frac{1}{\sigma}} \]</div>
+ <div class="prop"><strong>Proposition 5.</strong> More robots raise \(X\). The skill premium therefore rises with automation if and only if \(\sigma &gt; \varepsilon\): robots substitute for routine work more easily than skilled work substitutes for the routine bundle. This is the robot analogue of capital–skill complementarity.</div>
+ <h3>Every variation in one table</h3>
+ <table class="stack">
+  <thead><tr><th>Production system</th><th>Technology</th><th>Optimal choice</th><th>What drives labor’s fate</th></tr></thead>
+  <tbody>
+   <tr><td>Robots only</td><td>\(AR^{\theta}\)</td><td>\(\theta A R^{\theta-1}=c_R\)</td><td>No labor; growth set by \(A_R/p_R\)</td></tr>
+   <tr><td>Robots + labor (CES)</td><td>CES in \(L,R\)</td><td>\(R/L \propto (w/c_R)^{\sigma}\)</td><td>Share falls iff \(\sigma&gt;1\)</td></tr>
+   <tr><td>Robots + labor (tasks)</td><td>Task continuum</td><td>Automate if \(r_R/\gamma_R &lt; w/\gamma_L\)</td><td>Productivity vs displacement</td></tr>
+   <tr><td>Robots + capital + labor</td><td>\(K^{\alpha}X^{1-\alpha}\)</td><td>Closed-form \(s\)</td><td>Wage up, share down iff \(\sigma&gt;1\)</td></tr>
+   <tr><td>+ skilled labor</td><td>Nested CES</td><td>Same, with \(H\)</td><td>Premium up iff \(\sigma&gt;\varepsilon\)</td></tr>
+  </tbody>
+ </table>
+</div></section>
+
+<section class="band sec" id="firm"><div class="wrap">
+ <h2>Firm-level decision: who adopts robots?</h2>
+ <p>Adoption is lumpy. Firms differ in productivity \(\varphi\) and face decreasing returns \(\nu&lt;1\) on a constant-returns input bundle with unit cost \(c_j\). Technology \(j=0\) uses labor and capital; \(j=1\) adds robots and lowers unit cost to \(c_1&lt;c_0\), at an annualised fixed cost \(F\). Maximised profit is</p>
+ <div class="eq">\[ \pi_j(\varphi) = (1-\nu)\,\nu^{\frac{\nu}{1-\nu}}\,\varphi^{\frac{1}{1-\nu}}\,c_j^{-\frac{\nu}{1-\nu}} \]</div>
+ <p>The firm adopts if \(\pi_1(\varphi)-\pi_0(\varphi)\ge F\). Because the gain grows with \(\varphi\), there is a single cut-off:</p>
+ <div class="eq">\[ \varphi^{*} = \left[\frac{F}{(1-\nu)\,\nu^{\frac{\nu}{1-\nu}}\left(c_1^{-\frac{\nu}{1-\nu}} - c_0^{-\frac{\nu}{1-\nu}}\right)}\right]^{1-\nu} \]</div>
+ <div class="prop"><strong>Proposition 6.</strong> Only firms above \(\varphi^*\) automate, so adoption starts with the largest and most productive firms. Adopters expand output and can hire more workers, while non-adopting competitors lose market share. Lower fixed costs — through leasing, shared services or credit — reach smaller firms first by lowering \(\varphi^*\).</div>
+ <p>This matches firm-level evidence from Europe: robot adopters tend to grow employment, while the job losses appear among their competitors.</p>
+</div></section>
+
+<section class="band sec" id="hh"><div class="wrap">
+ <h2>Household-level decisions</h2>
+ <h3>Households as savers and robot owners</h3>
+ <p>A representative household chooses consumption \(c\), hours \(h\) and investment in capital and robots to maximise \(\int_0^\infty e^{-\rho t}u(c,1-h)\,dt\), subject to</p>
+ <div class="eq">\[ c + \dot K + p_R\dot R = w h + (r_K - \delta_K)K + (r_R - p_R\delta_R)R \]</div>
+ <p>Three conditions characterise the solution: the labor supply rule \(u_\ell/u_c = w\); the Euler equation \(\dot c/c = (r-\rho)/\eta\); and no-arbitrage between the two assets, \(r_K-\delta_K = r_R/p_R - \delta_R\). In steady state \(r=\rho\), which pins down the user costs used by firms in Models 1–3.</p>
+ <h3>Workers and owners</h3>
+ <p>Ownership matters for welfare. Suppose a share of households own only their labor and consume \(c^W = wh\), while owners hold \(K\) and \(R\). Then the income gap equals the ratio of factor shares:</p>
+ <div class="eq">\[ \frac{\text{owner income}}{\text{worker income}} = \frac{\alpha + (1-\alpha)s}{(1-\alpha)(1-s)} \]</div>
+ <p>With \(\sigma&gt;1\), cheaper robots raise \(s\) and widen this gap, even though worker income rises. Broad ownership of robots — cooperatives, pension funds, shared service firms — keeps the gains from concentrating.</p>
+ <h3>The agricultural household with robot services</h3>
+ <p>For farms, robots usually arrive as services: drone spraying, robotic weeding, hired automated harvesting. A farm household with land \(T\) maximises \(u(c,\ell)\) subject to</p>
+ <div class="eq">\[ c = pF(L_f, S;\,T) - w(L_f - L_o) - qS + w L_m, \qquad E = \ell + L_o + L_m \]</div>
+ <p>where \(L_f\) is total farm labor, \(L_o\) own labor on the farm, \(L_m\) off-farm work, \(S\) robot services at price \(q\) and \(E\) the time endowment. With complete labor markets the model is <em>separable</em>: the farm sets \(pF_L=w\) and \(pF_S=q\), independent of preferences. When the labor market is thin, the household uses a shadow wage \(w^{*}=u_\ell/u_c\) instead, so</p>
+ <div class="eq">\[ \frac{S}{L_f} \ \text{rises with}\ \frac{w^{*}}{q} \]</div>
+ <p>Labor-scarce households — those with migrant members, older heads or youth in school — have a higher \(w^*\) and adopt robot services first. Labor-rich households adopt later.</p>
+</div></section>
+
+<section class="band sec" id="ge"><div class="wrap">
+ <h2>General equilibrium and the automation growth regime</h2>
+ <p>Closing Model 3 with households, the steady state sets \(r=\rho\), so \(c_K=\rho+\delta_K\) and \(c_R=p_R(\rho+\delta_R)\). The closed-form share \(s\) has a natural upper limit. When robots and labor are substitutes (\(\sigma&gt;1\)) and robots become cheap enough that</p>
+ <div class="eq">\[ \frac{\gamma\tilde\Psi}{c_R} \ \ge\ (1-\omega)^{-\frac{\sigma}{\sigma-1}} \]</div>
+ <p>the marginal robot never stops paying for itself. No steady state exists. The economy enters an <em>automation growth regime</em>: robots accumulate without limit, growth becomes endogenous as in Model 1’s AK benchmark, the labor share tends to zero and wages still grow, at rate \(g/\sigma\).</p>
+ <div class="prop"><strong>Proposition 7.</strong> Mixed robot–human systems converge to a steady state unless robot cost falls below a critical threshold set by \(\sigma\), \(\omega\) and \(\gamma\). Beyond it, the economy shifts from Model 3 to Model 1: growth without labor scarcity, and distribution governed almost entirely by who owns the robots.</div>
+</div></section>
+
+<section class="band sec" id="africa"><div class="wrap">
+ <h2>Robots in low-income smallholder agriculture: Africa first</h2>
+ <p>Most theory of automation was built for rich economies where labor is scarce and expensive. Low-income agriculture looks very different: farms are small, family labor does most of the work, and wages are low. So the question is not whether robots raise productivity, but <em>when</em> they do so without destroying the jobs most rural people depend on. The same logic applies to South Asia and the wider Global South; Africa is the focus here.</p>
+
+ <h3>Context: a food gap that productivity is not closing</h3>
+ <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))">
+  <div class="kpi hot"><span>Sub-Saharan Africa food import bill, 2025 (FAO forecast)</span><em>US$65 bn</em></div>
+  <div class="kpi"><span>Agricultural TFP growth, 1980s–2000s</span><em>≈1% / yr</em></div>
+  <div class="kpi hot"><span>African urban population, 2025 → 2050 (OECD)</span><em>0.7 → 1.4 bn</em></div>
+  <div class="kpi"><span>Rural labor pattern</span><em style="font-size:20px">Peak shortages, year-round slack</em></div>
+ </div>
+ <p class="note" style="margin-top:-4px">Sources: FAO Food Outlook (Nov 2025); Fuglie and Rada, USDA ERS (2013); OECD/SWAC, Africa’s Urbanisation Dynamics 2025.</p>
+ <p>African farm output has grown mainly by adding land and labor, not by producing more per worker or per hectare. Recent household panel data even find stagnant or falling productivity in several countries. Meanwhile, urban demand is set to double. The gap is filled by imports, which drain foreign exchange and expose countries to world price spikes, currency shocks and supply disruptions. This is why food sovereignty — the ability to feed cities largely from domestic farms — has become a political priority.</p>
+ <p>Labor is the puzzle at the centre. Africa has abundant rural labor across the year, yet farms face sharp <em>seasonal</em> shortages. Because neighbours plant, weed and harvest at the same time, labor demand peaks together, and many farms cannot find workers when it matters. As rural youth move to towns, these peaks are getting tighter. A useful model must therefore capture both facts at once: underemployment on average, and a binding labor bottleneck at the peak.</p>
+
+ <h3>Model A — The two-season smallholder</h3>
+ <p>A household owns \(T\) hectares. Each cultivated hectare yields \(\bar y\) at price \(p\) and needs two kinds of work:</p>
+ <ul>
+  <li><strong>Peak task</strong> (land preparation, planting, harvest): \(a\) hours per hectare inside a short window. Household peak labor is \(E_p\); hired peak labor costs \(w_p\).</li>
+  <li><strong>Other tasks</strong> (weeding, post-harvest, marketing): \(b\) hours per hectare at the slack-season wage \(w_o\), with labor plentiful.</li>
+ </ul>
+ <p>A robot service does the peak task on one hectare at price \(q\). Cultivated area is limited by peak capacity:</p>
+ <div class="eq">\[ T_c = \min\left\{T,\ \frac{E_p + H}{a} + S\right\} \]</div>
+ <p>where \(H\) is hired peak labor and \(S\) the hectares served by robots. The household compares two costs of finishing the peak task on a hectare: \(a\,w_p^{*}\) with people, or \(q\) with robots. The key variable is the <em>shadow</em> peak wage \(w_p^{*}\):</p>
+ <div class="eq">\[ w_p^{*} = \begin{cases} w_p & \text{if peak labor can be hired freely} \\[4pt] \dfrac{p\bar y - b\,w_o}{a} & \text{if the peak constraint binds and land is idle} \end{cases} \qquad \text{Adopt robots} \iff q &lt; a\,w_p^{*} \]</div>
+ <p>When the constraint binds, the shadow wage equals the full net value of the hectare that would otherwise stay uncultivated, which can be many times the market wage. This gives three cases:</p>
+ <table class="stack">
+  <thead><tr><th>Case</th><th>Condition</th><th>Robot effect</th><th>Jobs</th></tr></thead>
+  <tbody>
+   <tr><td>1. Labor surplus</td><td>Peak labor easy to hire, \(q &gt; a\,w_p\)</td><td>Not profitable; only adopted if subsidised</td><td>Destroys hired-labor income of the landless: “so-so” automation</td></tr>
+   <tr><td>2. Peak bottleneck, land available</td><td>\(q &lt; p\bar y - b\,w_o\)</td><td>Expands cultivated area one-for-one</td><td>Creates \(b\) hours of other work per hectare</td></tr>
+   <tr><td>3. Bottleneck, land fixed</td><td>All land used, but late</td><td>Raises yield through timeliness, or allows a second crop</td><td>Depends on what freed labor does next</td></tr>
+  </tbody>
+ </table>
+ <h3>The job-creation condition</h3>
+ <p>Let \(\psi\in[0,1]\) be the share of robot work that <em>expands</em> production — new area, a second season, or yield saved by timely work — rather than replacing people on existing work. Let \(e\) be the operator, repair and logistics hours each robot-hectare creates. The net labor effect of one more robot-served hectare is</p>
+ <div class="eq">\[ \frac{dL}{dS} = \underbrace{\psi\, b}_{\text{expansion}} \;-\; \underbrace{(1-\psi)\,a}_{\text{displacement}} \;+\; \underbrace{e}_{\text{new service tasks}} \qquad\Longrightarrow\qquad \frac{dL}{dS} &gt; 0 \iff \psi &gt; \frac{a-e}{a+b} \]</div>
+ <div class="prop"><strong>Proposition 8.</strong> On smallholder farms, robots create net jobs when they relieve a binding bottleneck (high \(\psi\)), when the rest of the crop cycle is labor-intensive (high \(b\)), and when they bring new service tasks (high \(e\)). They destroy jobs when they replace cheap labor on land that would be farmed anyway (\(\psi\to 0\)).</div>
+
+ <h3>Model B — Can a robot service survive in a smallholder market?</h3>
+ <p>Few smallholders can buy a robot, so robots arrive through service providers. A provider with fixed cost \(F\) per season, variable cost \(m\) per hectare and daily capacity \(k\) can work only during a window of \(W\) days. It breaks even if</p>
+ <div class="eq">\[ U^{*} = \frac{F}{q-m} \ \le\ \min\{kW,\ D(q)\} \]</div>
+ <p>where \(D(q)\) is local demand. Three features of African farming push against viability: short, synchronised windows (small \(kW\)), scattered plots that raise travel cost \(m\), and thin demand that limits \(D(q)\). The remedies follow from the formula: multi-task robots that work in several seasons, providers that move across agro-ecological zones as harvests ripen, clustering of farms through cooperatives or aggregators, and finance that spreads \(F\).</p>
+
+ <h3>Model C — Economy-wide effects in a food-importing country</h3>
+ <p>Now step back to the whole economy. Agricultural employment equals output divided by labor productivity, \(L_A = Q_A/\pi_A\), so its growth rate is</p>
+ <div class="eq">\[ \hat L_A = \hat Q_A - \hat\pi_A \]</div>
+ <p>Robots raise \(\pi_A\). Whether farm jobs rise or fall depends on how fast output can grow, and that depends on the trade regime:</p>
+ <ul>
+  <li><strong>Import-parity regime (today’s Africa for rice, wheat, oils).</strong> The domestic price is set by imports, so extra domestic output replaces imports instead of pushing prices down. Output can grow fast: \(\hat Q_A\) is driven by supply response, not by limited demand. Farm jobs rise if \(\hat Q_A &gt; \hat\pi_A\).</li>
+  <li><strong>Self-sufficiency (non-tradable) regime.</strong> Once imports are gone, extra output must lower prices. With inelastic food demand (\(\varepsilon_D\) well below one), \(\hat Q_A\) is small, so higher productivity pushes labor out of farming. Urban consumers gain, but jobs must then come from other sectors.</li>
+ </ul>
+ <p>Summing all channels gives the economy-wide job effect of agricultural robots:</p>
+ <div class="eq">\[ \Delta J = \underbrace{L_A(\hat Q_A - \hat\pi_A)}_{\text{farm jobs}} + \underbrace{e\,S}_{\text{robot services}} + \underbrace{\mu\,\Delta Q_A}_{\text{processing and trade}} + \underbrace{\zeta\,(-\Delta p_F)\,C_F}_{\text{spending from cheaper food}} \]</div>
+ <p>Here \(\mu\) is jobs per unit of extra output along the value chain and \(\zeta\) the jobs created when households spend food savings elsewhere. The import bill also falls by \(p_M\,\Delta Q_A\), saving foreign exchange.</p>
+ <div class="prop"><strong>Proposition 9.</strong> In a food-importing economy, labor-saving robots in agriculture can <em>raise</em> total farm employment, because their output replaces imports rather than collapsing prices. The job gains are largest in the processing and service chain. Once self-sufficiency is reached, further robots release labor, and the outcome turns on whether manufacturing and services can absorb it. Brazil’s experience shows that labor-saving farm technology pushed workers into industry, while land-augmenting technology kept them on farms.</div>
+
+ <h3>Net job calculator</h3>
+ <div class="two">
+  <div class="sim">
+   <div class="ctl"><label for="jp">Share of robot work that expands production, ψ</label><output id="ojp"></output><input id="jp" type="range" min="0" max="1" step="0.01" value="0.5"></div>
+   <div class="ctl"><label for="ja">Peak-task hours per hectare, a</label><output id="oja"></output><input id="ja" type="range" min="20" max="400" step="5" value="150"></div>
+   <div class="ctl"><label for="jb">Other-task hours per hectare, b</label><output id="ojb"></output><input id="jb" type="range" min="20" max="800" step="10" value="300"></div>
+   <div class="ctl"><label for="je">Service hours per robot-hectare, e</label><output id="oje"></output><input id="je" type="range" min="0" max="60" step="1" value="10"></div>
+  </div>
+  <div>
+   <div class="kpi hot"><span>Net labor per 1,000 hectares served</span><em id="jN"></em></div>
+   <div class="kpis" style="margin-top:10px">
+    <div class="kpi"><span>Job-creating threshold, ψ*</span><em id="jT"></em></div>
+    <div class="kpi"><span>Verdict</span><em id="jV" style="font-size:20px"></em></div>
+   </div>
+   <p class="note">Person-days assume 8-hour days. Illustrative values, not estimates.</p>
+  </div>
+ </div>
+
+ <h3>When robots help, and when they don’t</h3>
+ <table class="stack">
+  <thead><tr><th>Robots help when…</th><th>Robots don’t help when…</th></tr></thead>
+  <tbody>
+   <tr><td>A peak-season bottleneck leaves land idle or work late</td><td>Labor is plentiful and cheap at the peak</td></tr>
+   <tr><td>The task is one people do badly: precision spraying, scouting, hazardous or drudging work</td><td>Robots only match people on cost (“so-so” automation)</td></tr>
+   <tr><td>The country imports the crop, so output replaces imports</td><td>The market is saturated and food demand is inelastic</td></tr>
+   <tr><td>Services are shared, farms are clustered and windows can be stretched</td><td>Plots are scattered, windows short and repair or energy unreliable</td></tr>
+   <tr><td>The rest of the value chain is labor-intensive (processing, horticulture)</td><td>Displaced workers are landless and have nowhere else to go</td></tr>
+  </tbody>
+ </table>
+ <p><strong>South Asia contrast.</strong> With farms often around one hectare and little idle land, the area-expansion channel is weak. There, \(\psi\) comes mainly from cropping intensity: fast turnaround between rice and wheat allows a second crop. Custom-hire markets for combine harvesters show the service model can work at scale.</p>
+ <div class="prop"><strong>Bottom line.</strong> In Africa’s current situation — import dependence, seasonal bottlenecks and, in many places, land still available — targeted robots in bottleneck tasks are likely to create jobs on balance, especially in services and processing. Blanket automation of tasks people already do cheaply would destroy jobs. Policy should target the bottleneck, not the robot.</div>
+</div></section>
+
+<section class="band sec" id="sim"><div class="wrap">
+ <h2>Simulator: change the robot economy</h2>
+ <p>This solves Model 3 in steady state with labor fixed at one, \(A=1\), \(r=4\%\), \(\delta_K=6\%\) and \(\delta_R=10\%\). Move robot price and the elasticity to see how wages and the labor share separate.</p>
+ <div class="two">
+  <div class="sim">
+   <div class="btns"><button data-p="sub">Substitutes (σ = 1.5)</button><button data-p="comp">Complements (σ = 0.7)</button><button data-p="sing">Near the threshold</button><button data-p="reset">Reset</button></div>
+   <div class="ctl"><label for="pR">Robot price, p<sub>R</sub></label><output id="opR"></output><input id="pR" type="range" min="-2.3" max="2.3" step="0.01" value="1.386"><small>Log scale, 0.1 to 10. Baseline 4.</small></div>
+   <div class="ctl"><label for="sg">Elasticity robots–labor, σ</label><output id="osg"></output><input id="sg" type="range" min="0.4" max="3" step="0.05" value="1.5"></div>
+   <div class="ctl"><label for="om">Labor weight, ω</label><output id="oom"></output><input id="om" type="range" min="0.5" max="0.9" step="0.01" value="0.75"></div>
+   <div class="ctl"><label for="ga">Robot efficiency, γ</label><output id="oga"></output><input id="ga" type="range" min="0.5" max="3" step="0.05" value="1"></div>
+   <div class="ctl"><label for="al">Capital share, α</label><output id="oal"></output><input id="al" type="range" min="0.2" max="0.45" step="0.01" value="0.3"></div>
+  </div>
+  <div>
+   <div id="reg" class="regime" aria-live="polite"></div>
+   <div class="kpis">
+    <div class="kpi hot"><span>Labor share of output</span><em id="kL"></em></div>
+    <div class="kpi hot"><span>Wage vs baseline (p<sub>R</sub>=4)</span><em id="kW"></em></div>
+    <div class="kpi"><span>Robot share of output</span><em id="kR"></em></div>
+    <div class="kpi"><span>Robots per worker</span><em id="kRL"></em></div>
+   </div>
+   <div class="charts">
+    <div><p class="ct">Labor share (%) by robot price</p><div class="fig" id="c1"></div></div>
+    <div><p class="ct">Wage index by robot price</p><div class="fig" id="c2"></div></div>
+   </div>
+   <p class="note">Shaded area: robot prices in the automation growth regime, where no steady state exists.</p>
+  </div>
+ </div>
+
+ <h3>Task model: does automating one more task help workers?</h3>
+ <div class="two">
+  <div class="sim">
+   <div class="ctl"><label for="ts">Share of tasks people still do, N − I</label><output id="ots"></output><input id="ts" type="range" min="0.2" max="0.9" step="0.01" value="0.6"></div>
+   <div class="ctl"><label for="cs">Robot cost advantage on the marginal task</label><output id="ocs"></output><input id="cs" type="range" min="0" max="600" step="1" value="40"><small>How much more a person costs than a robot on that task.</small></div>
+  </div>
+  <div>
+   <div class="kpis">
+    <div class="kpi"><span>Productivity effect</span><em id="tP"></em></div>
+    <div class="kpi"><span>Displacement effect</span><em id="tD"></em></div>
+   </div>
+   <div class="kpi hot"><span>Short-run wage change from automating 1% more tasks</span><em id="tW"></em></div>
+   <p class="note" id="tTxt" style="margin-top:10px"></p>
+  </div>
+ </div>
+</div></section>
+
+<section class="band sec" id="policy"><div class="wrap">
+ <h2>What the theory implies for policy</h2>
+ <table class="stack">
+  <thead><tr><th>Lever</th><th>Model channel</th><th>Implication</th></tr></thead>
+  <tbody>
+   <tr><td>Create new tasks</td><td>Raise \(N\): reinstatement effect</td><td>Fund agri-service, maintenance, data and repair jobs around robots; the strongest pro-worker lever</td></tr>
+   <tr><td>Avoid “so-so” automation</td><td>Productivity effect vs \(1/(N-I)\)</td><td>Do not subsidise robots that barely beat labor costs; target tasks with large productivity gains</td></tr>
+   <tr><td>Skills</td><td>Raise \(H\), lower \(\sigma\) relative to \(\varepsilon\)</td><td>Training turns robots from substitutes into complements for youth</td></tr>
+   <tr><td>Shared ownership</td><td>Owner–worker income gap</td><td>Cooperatives and service-provider models spread robot income</td></tr>
+   <tr><td>Lower fixed costs</td><td>Fall in \(\varphi^*\)</td><td>Leasing, hire services and credit bring smaller firms and farms in</td></tr>
+   <tr><td>Robot taxes</td><td>Raise \(c_R\)</td><td>Theory supports at most a small, temporary tax while current workers adjust</td></tr>
+  </tbody>
+ </table>
+ <p>For African agri-food systems, where labor is abundant and young, the key message is that the <em>type</em> of automation matters more than its speed. Robots that do tasks people cannot do well, and that create service jobs around them, raise wages. Robots that only replace cheap labor do not.</p>
+</div></section>
+
+<section class="band sec" id="refs"><div class="wrap">
+ <h2>References</h2>
+ <ol class="refs">
+  <li>Acemoglu, D. and Restrepo, P. (2018). The race between man and machine. <em>American Economic Review</em>, 108(6).</li>
+  <li>Acemoglu, D. and Restrepo, P. (2019). Automation and new tasks. <em>Journal of Economic Perspectives</em>, 33(2).</li>
+  <li>Acemoglu, D. and Restrepo, P. (2020). Robots and jobs: evidence from US labor markets. <em>Journal of Political Economy</em>, 128(6).</li>
+  <li>Berg, A., Buffie, E. and Zanna, L.-F. (2018). Should we fear the robot revolution? <em>Journal of Monetary Economics</em>, 97.</li>
+  <li>Costinot, A. and Werning, I. (2023). Robots, trade, and Luddism. <em>Review of Economic Studies</em>, 90(5).</li>
+  <li>Graetz, G. and Michaels, G. (2018). Robots at work. <em>Review of Economics and Statistics</em>, 100(5).</li>
+  <li>Guerreiro, J., Rebelo, S. and Teles, P. (2022). Should robots be taxed? <em>Review of Economic Studies</em>, 89(1).</li>
+  <li>Koch, M., Manuylov, I. and Smolka, M. (2021). Robots and firms. <em>Economic Journal</em>, 131(638).</li>
+  <li>Krusell, P., Ohanian, L., Ríos-Rull, J.-V. and Violante, G. (2000). Capital-skill complementarity and inequality. <em>Econometrica</em>, 68(5).</li>
+  <li>Singh, I., Squire, L. and Strauss, J. (1986). <em>Agricultural Household Models</em>. Johns Hopkins University Press.</li>
+  <li>Zeira, J. (1998). Workers, machines, and economic growth. <em>Quarterly Journal of Economics</em>, 113(4).</li>
+  <li>Bustos, P., Caprettini, B. and Ponticelli, J. (2016). Agricultural productivity and structural transformation: evidence from Brazil. <em>American Economic Review</em>, 106(6).</li>
+  <li>Fuglie, K. and Rada, N. (2013). <em>Resources, Policies, and Agricultural Productivity in Sub-Saharan Africa</em>. USDA ERS, ERR-145.</li>
+  <li>Matsuyama, K. (1992). Agricultural productivity, comparative advantage, and economic growth. <em>Journal of Economic Theory</em>, 58(2).</li>
+  <li>OECD/SWAC (2025). <em>Africa’s Urbanisation Dynamics 2025</em>. OECD Publishing.</li>
+  <li>Pingali, P. (2007). Agricultural mechanization: adoption patterns and economic impact. <em>Handbook of Agricultural Economics</em>, Vol. 3.</li>
+  <li>Wollburg, P., Bentze, T., Lu, Y., Udry, C. and Gollin, D. (2023). Agricultural productivity growth in Africa: new evidence from microdata. World Bank working paper.</li>
+ </ol>
+</div></section>
+</main>
+
+<footer class="band foot"><div class="wrap">© 2026 Tebila Nakelse. Working paper — comments welcome. Simulator values are illustrative calibrations, not estimates.</div></footer>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const cKf=()=>0.10, uR=0.14;
+function solve(p,sig,om,al,ga){
+ const cK=cKf(),cR=p*uR,Psi=Math.pow(al/cK,al/(1-al)),x=ga*(1-al)*Psi/cR;let s,XL,RL;
+ if(Math.abs(sig-1)<0.01){s=1-om;XL=Math.pow(x*(1-om),(1-om)/om);RL=(1-al)*Psi*(1-om)*XL/cR;}
+ else{s=Math.pow(1-om,sig)*Math.pow(x,sig-1);if(s>=1||!isFinite(s))return{growth:true};
+  XL=Math.pow(om/(1-s),sig/(sig-1));RL=Math.pow(om*s/((1-om)*(1-s)),sig/(sig-1))/ga;}
+ const Y=Psi*XL;return{s,Y,w:(1-al)*(1-s)*Y,RL,sL:(1-al)*(1-s),sR:(1-al)*s};
+}
+const pct=v=>(v*100).toFixed(1)+'%';
+const fmt=v=>v>=1000?v.toExponential(1):v>=100?v.toFixed(0):v>=10?v.toFixed(1):v.toFixed(2);
+const V=()=>({p:Math.exp(+$('pR').value),sig:+$('sg').value,om:+$('om').value,ga:+$('ga').value,al:+$('al').value});
+function axes(el,pts,cur,ylab,growthX){
+ const W=el.clientWidth,H=el.clientHeight,m={l:40,r:10,t:10,b:28},iw=W-m.l-m.r,ih=H-m.t-m.b;
+ const xs=v=>m.l+(v+2.3)/4.6*iw;
+ const ok=pts.filter(d=>d.y!=null&&isFinite(d.y));
+ let ymax=Math.max(...ok.map(d=>d.y),cur??0)*1.08||1;const ymin=0;
+ const ys=v=>m.t+ih-(Math.min(v,ymax)-ymin)/(ymax-ymin)*ih;
+ let d='';let pen=false;for(const q of pts){if(q.y==null||!isFinite(q.y)){pen=false;continue}d+=(pen?'L':'M')+xs(q.x).toFixed(1)+' '+ys(q.y).toFixed(1);pen=true}
+ const ticks=[0.1,1,10].map(t=>`<text x="${xs(Math.log(t))}" y="${H-8}" font-size="12" text-anchor="middle" fill="currentColor" opacity=".7">${t}</text>`).join('');
+ const yt=W<200?'':[0,ymax/2,ymax].map(t=>`<text x="${m.l-6}" y="${ys(t)+4}" font-size="12" text-anchor="end" fill="currentColor" opacity=".7">${ylab(t)}</text><line x1="${m.l}" x2="${W-m.r}" y1="${ys(t)}" y2="${ys(t)}" stroke="currentColor" opacity=".12"/>`).join('');
+ const shade=growthX!=null?`<rect x="${m.l}" y="${m.t}" width="${Math.max(0,xs(growthX)-m.l)}" height="${ih}" fill="#e0115f" opacity=".12"/>`:'';
+ const cx=xs(Math.log(V().p));
+ const mark=cur!=null&&isFinite(cur)?`<circle cx="${cx}" cy="${ys(cur)}" r="6" fill="#e0115f" style="stroke:var(--panel)" stroke-width="2"/>`:'';
+ el.innerHTML=`<svg width="${W}" height="${H}" style="color:var(--ink)">${shade}${yt}${ticks}<path d="${d}" fill="none" stroke="#3b6fe0" stroke-width="2.5"/><line x1="${cx}" x2="${cx}" y1="${m.t}" y2="${m.t+ih}" stroke="#e0115f" stroke-dasharray="3 3" opacity=".6"/>${mark}</svg>`;
+}
+function update(){
+ const v=V();
+ $('opR').textContent=v.p.toFixed(2);$('osg').textContent=v.sig.toFixed(2);$('oom').textContent=v.om.toFixed(2);$('oga').textContent=v.ga.toFixed(2);$('oal').textContent=v.al.toFixed(2);
+ const r=solve(v.p,v.sig,v.om,v.al,v.ga),b=solve(4,v.sig,v.om,v.al,v.ga);
+ const reg=$('reg');
+ if(r.growth){reg.className='regime g';reg.textContent='Automation growth regime: robots are cheap enough that no steady state exists. Robots accumulate without limit, the labor share heads to zero, and wages keep growing.';
+  $('kL').textContent='→ 0%';$('kW').textContent='↑ ∞';$('kR').textContent='→ '+pct(1-v.al);$('kRL').textContent='↑ ∞';}
+ else{reg.className='regime';reg.textContent=v.sig>1?'Robots and labor are substitutes: cheaper robots raise wages but shrink labor’s share.':v.sig<1?'Robots and labor are complements: cheaper robots raise both wages and labor’s share.':'Cobb–Douglas case: shares are fixed; cheaper robots raise wages only.';
+  $('kL').textContent=pct(r.sL);$('kW').textContent=b.growth?'—':'×'+fmt(r.w/b.w);$('kR').textContent=pct(r.sR);$('kRL').textContent=fmt(r.RL);}
+ const pts1=[],pts2=[];let gx=null;
+ for(let x=-2.3;x<=2.3001;x+=0.05){const q=solve(Math.exp(x),v.sig,v.om,v.al,v.ga);if(q.growth){gx=x+0.025;pts1.push({x,y:null});pts2.push({x,y:null});}else{pts1.push({x,y:q.sL*100});pts2.push({x,y:b.growth?null:q.w/b.w});}}
+ axes($('c1'),pts1,r.growth?null:r.sL*100,t=>t.toFixed(0),gx);
+ const capped=pts2.map(q=>({x:q.x,y:q.y!=null?Math.min(q.y,6):null}));
+ axes($('c2'),capped,r.growth||b.growth?null:Math.min(r.w/b.w,6),t=>t.toFixed(1),gx);
+}
+function task(){
+ const ts=+$('ts').value,cs=+$('cs').value/100;
+ const P=Math.log(1+cs),D=1/ts,dw=(P-D)*0.01;
+ $('ots').textContent=pct(ts);$('ocs').textContent=(cs*100).toFixed(0)+'%';
+ $('tP').textContent='+'+P.toFixed(2);$('tD').textContent='−'+D.toFixed(2);
+ $('tW').textContent=(dw>=0?'+':'')+(dw*100).toFixed(2)+'%';
+ const need=(Math.exp(D)-1)*100;
+ $('tTxt').textContent=dw>=0?`Automation helps workers here, even in the short run: the cost advantage exceeds the ${need.toFixed(0)}% break-even.`:`So-so automation: a person must cost at least ${need.toFixed(0)}% more than a robot on this task before workers gain in the short run.`;
+}
+const presets={sub:{pR:1.386,sg:1.5,om:0.75,ga:1,al:0.3},comp:{pR:1.386,sg:0.7,om:0.75,ga:1,al:0.3},sing:{pR:-1.97,sg:1.5,om:0.75,ga:1,al:0.3},reset:{pR:1.386,sg:1.5,om:0.75,ga:1,al:0.3}};
+document.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>{const p=presets[b.dataset.p];for(const k in p)$(k).value=p[k];update();}));
+['pR','sg','om','ga','al'].forEach(id=>$(id).addEventListener('input',update));
+['ts','cs'].forEach(id=>$(id).addEventListener('input',task));
+const roC=new ResizeObserver(()=>update());roC.observe($('c1'));
+function jobs(){const p=+$('jp').value,a=+$('ja').value,b=+$('jb').value,e=+$('je').value;
+ $('ojp').textContent=p.toFixed(2);$('oja').textContent=a;$('ojb').textContent=b;$('oje').textContent=e;
+ const d=p*b-(1-p)*a+e,pd=d*1000/8,t=Math.max(0,(a-e)/(a+b));
+ $('jN').textContent=(pd>=0?'+':'−')+Math.abs(Math.round(pd)).toLocaleString('en-US')+' person-days';
+ $('jT').textContent=t.toFixed(2);$('jV').textContent=d>=0?'Job-creating':'Job-destroying';}
+['jp','ja','jb','je'].forEach(id=>$(id).addEventListener('input',jobs));jobs();
+task();
+
+/* hero: the task line */
+const hero=$('hero');let tI=0.55,dir=1;
+function drawHero(){
+ const W=hero.clientWidth,H=hero.clientHeight,n=W<480?24:40,pad=Math.max(16,W*0.05),bw=W-2*pad,cell=bw/n,y0=H*0.36,h=H*0.24;
+ const I=Math.round(n*tI);let cells='';
+ for(let i=0;i<n;i++){const rob=i<I;cells+=`<rect x="${(pad+i*cell+1).toFixed(1)}" y="${y0}" width="${(cell-2).toFixed(1)}" height="${h}" rx="3" fill="${rob?'#e0115f':'#c9d6f5'}" opacity="${rob?0.55+0.45*i/n:0.95}"/>`}
+ const xI=pad+I*cell;const fs=W<480?12:14;
+ hero.innerHTML=`<svg width="${W}" height="${H}">${cells}
+ <line x1="${xI}" x2="${xI}" y1="${y0-26}" y2="${y0+h+26}" stroke="#fff" stroke-width="2.5"/>
+ <text x="${xI}" y="${y0-34}" fill="#fff" font-size="${fs+2}" font-weight="700" text-anchor="middle" font-family="Red Hat Display">I</text>
+ <text x="${pad}" y="${y0-12}" fill="#ffb3cd" font-size="${fs}" font-family="Red Hat Text">Robots</text>
+ <text x="${W-pad}" y="${y0-12}" fill="#c9d6f5" font-size="${fs}" text-anchor="end" font-family="Red Hat Text">People</text>
+ <text x="${pad}" y="${y0+h+22}" fill="#aeb9da" font-size="${fs}" font-family="Red Hat Text">N − 1</text>
+ <text x="${W-pad}" y="${y0+h+22}" fill="#aeb9da" font-size="${fs}" text-anchor="end" font-family="Red Hat Text">N</text>
+ <text x="${pad}" y="${H-46}" fill="#fff" font-size="${fs}" font-family="Red Hat Text">→ Automation moves I right: displacement</text>
+ <text x="${pad}" y="${H-22}" fill="#fff" font-size="${fs}" font-family="Red Hat Text">→ New tasks move N right: reinstatement</text>
+ </svg>`;
+}
+const roH=new ResizeObserver(drawHero);roH.observe(hero);
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){setInterval(()=>{tI+=dir*0.025;if(tI>0.72||tI<0.4)dir*=-1;drawHero();},700);}
+}
+</script>
+</body>
+</html>
